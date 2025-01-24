@@ -1,12 +1,12 @@
 import { DatabaseContract } from "./contracts/DatabaseContract";
 import { PrismaClient } from "@prisma/client";
 
-class PrismaDatabase implements DatabaseContract<PrismaClient> {
+class PrismaDatabase implements DatabaseContract {
 	private client: PrismaClient;
 	constructor() {
 		this.client = new PrismaClient();
 	}
-	async getConnection(): Promise<PrismaClient> {
+	getConnection(): PrismaClient {
 		return this.client;
 	}
   async connect(): Promise<void> {
@@ -14,4 +14,4 @@ class PrismaDatabase implements DatabaseContract<PrismaClient> {
   }
 }
 
-export default new PrismaDatabase();
+export default PrismaDatabase;

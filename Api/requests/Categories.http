@@ -1,0 +1,14 @@
+# List Categories
+GET http://localhost:3001/categories
+
+###
+
+# Create Category
+POST  http://localhost:3001/categories
+Content-Type: application/json
+
+{
+    "name": "Category",
+    "icon": ":>>",
+		"products": []
+}

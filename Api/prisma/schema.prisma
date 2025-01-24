@@ -19,11 +19,32 @@ model Product {
 	description String
 	imagePath String
 	price Int
+
 	categoryId String
 	category Category @relation(fields: [categoryId], references: [id])
+
 	orders ProductsOnOrder[]
+	ingredients IngredientOnProduct[]
 
 	@@map("products")
+}
+
+model Ingredient {
+  id    String	@id @default(cuid())
+  name  String
+	icon  String
+
+	products IngredientOnProduct[]
+}
+
+model IngredientOnProduct {
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+
+  ingredientId String
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+	@@id([productId, ingredientId])
 }
 
 model Category {

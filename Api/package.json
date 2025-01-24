@@ -4,9 +4,11 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon src/index.ts",
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "start": "node dist/index.js",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "prisma:migrate": "npx prisma migrate dev --name",
+    "prisma:studio": "npx prisma studio"
   },
   "author": "",
   "license": "ISC",
@@ -28,7 +30,9 @@
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "brandi": "^5.0.0",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "tsconfig-paths": "^4.2.0"
   }
 }

@@ -1,6 +1,8 @@
-interface DatabaseContract<T> {
+import { PrismaClient } from "@prisma/client";
+
+interface DatabaseContract {
   connect(): Promise<void>;
-	getConnection(): Promise<T>;
+	getConnection(): PrismaClient;
 }
 
 export type { DatabaseContract };
