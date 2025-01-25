@@ -15,6 +15,7 @@ PrismaClient.connect()
 		console.log("Connected to database");
 		const CategoriesController = container.get(CATEGORIES_CONTROLLERS_TOKEN);
 
+		app.use(express.json());
 		app.use(initializeRoutes(CategoriesController));
 
 		app.listen(3001, () => {

@@ -10,9 +10,20 @@ class CategoryUseCases {
         return await this._categoryRepository.getAll();
     }
 
+		async getCategoryByIdUseCase(id: string) {
+			return await this._categoryRepository.getById(id);
+		}
+
 		async createCategoryUseCase(category: Category) {
-			console.log("UseCase: ", category)
 			return await this._categoryRepository.create(category);
+		}
+
+		async updateCategoryUseCase(id: string, category: Category) {
+			return await this._categoryRepository.update(id, category);
+		}
+
+		async deleteCategoryUseCase(id: string) {
+			return await this._categoryRepository.delete(id);
 		}
 }
 
