@@ -3,16 +3,21 @@ import { Router } from "express";
 import CategoriesController from "@controllers/CategoriesController"
 import { validateData } from "@/middlewares";
 import CategoryValidator from "@/validators/CategoryValidator";
+import * as tokens from "@/utils/di/tokens";
 
-const initializeRoutes = (categoriesController: CategoriesController) => {
+const initializeRoutes = (container: Container) => {
 	const router = Router();
 
+	const controllers = {
+		categories: container.get(tokens.CATEGORIES_CONTROLLERS_TOKEN)
+	}
+
 	// Categories
-	router.get("/categories", categoriesController.index.bind(categoriesController));
-	router.get("/categories/:id", categoriesController.show.bind(categoriesController));
-	router.post("/categories", validateData(CategoryValidator), categoriesController.create.bind(categoriesController));
-	router.put("/categories/:id", validateData(CategoryValidator), categoriesController.update.bind(categoriesController));
-	router.delete("/categories/:id", categoriesController.delete.bind(categoriesController));
+	router.get("/categories", controllers.categories.index);
+	router.get("/categories/:id", controllers.categories.show);
+	router.post("/categories", validateData(CategoryValidator), controllers.categories.create);
+	router.put("/categories/:id", validateData(CategoryValidator), controllers.categories.update);
+	router.delete("/categories/:id", controllers.categories.delete);
 
 	return router;
 }

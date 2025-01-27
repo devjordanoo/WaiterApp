@@ -13,10 +13,9 @@ const PrismaClient = container.get(DATABASE_TOKEN);
 PrismaClient.connect()
 	.then(() => {
 		console.log("Connected to database");
-		const CategoriesController = container.get(CATEGORIES_CONTROLLERS_TOKEN);
 
 		app.use(express.json());
-		app.use("/api", initializeRoutes(CategoriesController));
+		app.use("/api", initializeRoutes(container));
 
 		app.listen(3001, () => {
 			console.log(`Listening on port ${PORT}`);

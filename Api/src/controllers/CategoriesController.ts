@@ -5,9 +5,12 @@ import { StatusCodes } from "http-status-codes";
 
 import CategoryUseCases from "@usecases/CategoryUseCases";
 import { CustomMessageError } from "@/errors/CustomMessageError";
+import BaseController from "@controllers/BaseController";
 
-class CategoriesController {
-	constructor(private _categoryUseCases: CategoryUseCases) {}
+class CategoriesController extends BaseController {
+	constructor(private _categoryUseCases: CategoryUseCases) {
+		super();
+	}
 
 	async index(req: Request, res: Response) {
 		const categories = await this._categoryUseCases.listCategoryUseCase();
