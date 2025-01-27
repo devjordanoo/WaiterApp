@@ -4,3 +4,4 @@ prisma/migrations
 .env
 .mysql*
 TASK.MD
+coverage/

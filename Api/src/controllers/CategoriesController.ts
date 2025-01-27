@@ -4,6 +4,7 @@ import * as tokens from "@/utils/di/tokens";
 import { StatusCodes } from "http-status-codes";
 
 import CategoryUseCases from "@usecases/CategoryUseCases";
+import { CustomMessageError } from "@/errors/CustomMessageError";
 
 class CategoriesController {
 	constructor(private _categoryUseCases: CategoryUseCases) {}
@@ -22,13 +23,15 @@ class CategoriesController {
 		try {
 			const category = req.body;
 			const createdCategory = await this._categoryUseCases.createCategoryUseCase(category);
-			res.status(StatusCodes.OK).json(createdCategory);
 
+			res.status(StatusCodes.CREATED).json(createdCategory);
 		} catch (error: any) {
+			const customMessageError = new CustomMessageError(error);
+
 			res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 				error: 'Internal Server Error',
-				details: error.message
-			 });
+				details: customMessageError.message
+			});
 		}
 	}
 
