@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+	previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -26,13 +27,16 @@ model Product {
 	orders ProductsOnOrder[]
 	ingredients IngredientOnProduct[]
 
+	createdAt DateTime	@default(now())
+	updatedAt DateTime	@updatedAt @default(now())
+	active Boolean	@default(true)
+
 	@@map("products")
 }
 
 model Ingredient {
   id    String	@id @default(cuid())
   name  String
-	icon  String
 
 	products IngredientOnProduct[]
 }
@@ -53,6 +57,10 @@ model Category {
 	icon String
 	products Product[]
 
+	createdAt DateTime	@default(now())
+	updatedAt DateTime	@updatedAt @default(now())
+	active Boolean	@default(true)
+
 	@@map("categories")
 }
 
@@ -66,8 +74,11 @@ model Order {
   id    String	@id @default(cuid())
 	table	String
 	status OrderStatus	@default(WAITING)
-	createdAt DateTime	@default(now())
 	products ProductsOnOrder[]
+
+	createdAt DateTime	@default(now())
+	updatedAt DateTime	@updatedAt @default(now())
+	active Boolean	@default(true)
 
   @@map("orders")
 }

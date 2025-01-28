@@ -19,10 +19,26 @@ class CategoryUseCases {
 		}
 
 		async updateCategoryUseCase(id: string, category: Category) {
+			const exists = await this._categoryRepository.checkIfExists(id);
+
+			if(!exists) {
+				throw new Error("Category not found");
+			}
+
+			if(await this._categoryRepository.checkIfCategoryHaveProducts(id)) {
+				throw new Error("Category have products, you can't update it");
+			}
+
 			return await this._categoryRepository.update(id, category);
 		}
 
 		async deleteCategoryUseCase(id: string) {
+			const checkIfCategoryHaveProducts = await this._categoryRepository.checkIfCategoryHaveProducts(id);
+
+			if(checkIfCategoryHaveProducts) {
+				throw new Error("Category have products, you can't delete it");
+			}
+
 			return await this._categoryRepository.delete(id);
 		}
 }

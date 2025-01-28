@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .ts",
     "prisma:migrate": "npx prisma migrate dev --name",
     "prisma:studio": "npx prisma studio",
+    "prisma:reset": "npx prisma migrate reset && npx prisma db push",
     "test": "jest"
   },
   "author": "",
@@ -42,6 +43,7 @@
     "express": "^4.21.2",
     "http-status-codes": "^2.3.0",
     "tsconfig-paths": "^4.2.0",
+    "uuid": "^11.0.5",
     "zod": "^3.24.1"
   }
 }

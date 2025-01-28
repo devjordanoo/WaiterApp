@@ -1,5 +1,4 @@
 import { Category } from "@models/Category";
-import { DatabaseContract } from "@database/contracts/DatabaseContract";
 
 interface CategoryRepositoryContract {
 	getAll(): Promise<Category[]>;
@@ -7,6 +6,8 @@ interface CategoryRepositoryContract {
 	create(category: Category): Promise<Category>;
 	update(id: string, category: Category): Promise<Category>;
 	delete(id: string): Promise<void>;
+	checkIfExists(id: string): Promise<boolean>;
+	checkIfCategoryHaveProducts(id: string): Promise<boolean>;
 }
 
 export type { CategoryRepositoryContract };

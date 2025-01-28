@@ -9,7 +9,11 @@ class CategoryRepository implements CategoryRepositoryContract {
 	constructor(private _clientDatabase: DatabaseContract) {}
 
 	async getAll(): Promise<Category[]> {
-		return await this._clientDatabase.getConnection().category.findMany();
+		return await this._clientDatabase.getConnection().category.findMany({
+			where: {
+				active: true
+			}
+		});
 	}
 
 	async getById(id: string): Promise<Category> {
@@ -76,12 +80,55 @@ class CategoryRepository implements CategoryRepositoryContract {
 	}
 
 	async delete(id: string): Promise<void> {
-		await this._clientDatabase.getConnection().category.delete({
+		try {
+			await this._clientDatabase.getConnection().category.update({
+				where: {
+					id
+				},
+				data: {
+					active: false
+				}
+			});
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	}
+
+	async checkIfExists(id: string): Promise<boolean> {
+		const category = await this._clientDatabase.getConnection().category.findUnique({
 			where: {
 				id: id
+			},
+			select: {
+				id: true
 			}
 		});
+
+		return category ? true : false;
 	}
+
+	async checkIfCategoryHaveProducts(id: string): Promise<boolean> {
+		const category = await this._clientDatabase.getConnection().category.findUnique({
+			where: {
+				id: id
+			},
+			select: {
+				id: true,
+				products: {
+					select: {
+						id: true
+					}
+				}
+			}
+		});
+
+		if(category?.products?.length === 0) {
+			return false;
+		}
+
+		return true;
+	}
+
 }
 
 injected(CategoryRepository, DATABASE_TOKEN);
