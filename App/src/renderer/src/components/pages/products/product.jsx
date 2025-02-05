@@ -25,7 +25,7 @@ const Product = ({ product }) => {
             <Typography>{product.name}</Typography>
             <Typography>R$ {product.price}</Typography>
             <Chip
-              label="Pizza"
+              label={`${product.category.icon} - ${product.category.name}`}
               color="success"
               variant="outlined"
               size="small"

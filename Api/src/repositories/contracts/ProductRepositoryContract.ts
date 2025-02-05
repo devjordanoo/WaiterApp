@@ -1,7 +1,8 @@
 import { Product } from "@models/Product";
+import { PaginateContract } from "@repositories/contracts/PaginateContract";
 
 interface ProductRepositoryContract {
-	getAll(): Promise<Product[]>;
+	getAll(page: number, limit: number, search: string): Promise<PaginateContract<Product>>;
 	getById(id: string): Promise<Product | null>;
 	create(product: Product): Promise<Product>;
 	update(id: string, product: Product): Promise<Product>;

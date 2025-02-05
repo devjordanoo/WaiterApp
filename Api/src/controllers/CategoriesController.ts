@@ -13,7 +13,11 @@ class CategoriesController extends BaseController {
 	}
 
 	async index(req: Request, res: Response) {
-		const categories = await this._categoryUseCases.listCategoryUseCase();
+		const limit = parseInt(req.query.limit as string) || 10;
+		const page = parseInt(req.query.page as string) || 1;
+		const search = req.query.search as string;
+
+		const categories = await this._categoryUseCases.listCategoryUseCase(page, limit, search);
 		res.status(StatusCodes.OK).json(categories);
 	}
 

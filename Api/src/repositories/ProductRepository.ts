@@ -5,18 +5,41 @@ import { injected } from 'brandi';
 import { DATABASE_TOKEN } from "@/utils/di/tokens";
 import { Prisma } from "@prisma/client";
 import crypto from "crypto";
+import { PaginateContract } from "@repositories/contracts/PaginateContract";
 
 class ProductRepository implements ProductRepositoryContract {
 	constructor(private _clientDatabase: DatabaseContract) {}
-	async getAll(): Promise<Product[]> {
-		return await this._clientDatabase.getConnection().product.findMany({
-			where: {
-				active: true,
-			},
-			include: {
-				category: true,
+
+	async getAll(page: number, limit: number, search: string): Promise<PaginateContract<Product>> {
+		const where: Prisma.ProductWhereInput = {
+			active: true
+		}
+
+		if(search) {
+			where.name = {
+				contains: search
 			}
-		});
+		}
+
+		const [products, total] = await this._clientDatabase.getConnection().$transaction([
+			this._clientDatabase.getConnection().product.findMany({
+				where,
+				include: {
+					category: true,
+				},
+				take: limit,
+				skip: (page - 1) * limit
+			}),
+			this._clientDatabase.getConnection().product.count()
+		]);
+
+		const data: PaginateContract<Product> = {
+			currentPage: page,
+			total: total,
+			data: products
+		}
+
+		return data
 	}
 
 	async getById(id: string): Promise<Product | null> {

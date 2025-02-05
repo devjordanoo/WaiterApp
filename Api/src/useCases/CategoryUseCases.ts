@@ -4,10 +4,10 @@ import { CATEGORY_REPOSITORIES_TOKEN } from "@/utils/di/tokens";
 import { Category } from "@models/Category";
 
 class CategoryUseCases {
-	constructor(private _categoryRepository: CategoryRepository) {}
+		constructor(private _categoryRepository: CategoryRepository) {}
 
-    async listCategoryUseCase() {
-        return await this._categoryRepository.getAll();
+    async listCategoryUseCase(page: number, limit: number, search: string = "") {
+        return await this._categoryRepository.getAll(page, limit, search);
     }
 
 		async getCategoryByIdUseCase(id: string) {

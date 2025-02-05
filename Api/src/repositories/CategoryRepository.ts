@@ -4,16 +4,38 @@ import { DatabaseContract } from "@database/contracts/DatabaseContract";
 import { injected } from 'brandi';
 import { DATABASE_TOKEN } from "@/utils/di/tokens";
 import { Prisma } from "@prisma/client";
+import { PaginateContract } from "@repositories/contracts/PaginateContract";
 
 class CategoryRepository implements CategoryRepositoryContract {
 	constructor(private _clientDatabase: DatabaseContract) {}
 
-	async getAll(): Promise<Category[]> {
-		return await this._clientDatabase.getConnection().category.findMany({
-			where: {
-				active: true
+	async getAll(page: number, limit: number, search: string): Promise<PaginateContract<Category>> {
+		const where: Prisma.CategoryWhereInput = {
+			active: true
+		}
+
+		if(search) {
+			where.name = {
+				contains: search
 			}
-		});
+		}
+
+		const [categories, total] = await this._clientDatabase.getConnection().$transaction([
+			this._clientDatabase.getConnection().category.findMany({
+				where,
+				take: limit,
+				skip: (page - 1) * limit
+			}),
+			this._clientDatabase.getConnection().category.count()
+		]);
+
+		const data: PaginateContract<Category> = {
+			currentPage: page,
+			total: total,
+			data: categories
+		}
+
+		return data
 	}
 
 	async getById(id: string): Promise<Category> {

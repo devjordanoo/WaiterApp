@@ -7,8 +7,8 @@ import { Product } from "@models/Product";
 class ProductUseCases {
 	constructor(private _productRepository: ProductRepository, private _categoryRepository: CategoryRepository) {}
 
-    async listProductUseCase() {
-        return await this._productRepository.getAll();
+    async listProductUseCase(page: number, limit: number, search: string = "") {
+        return await this._productRepository.getAll(page, limit, search);
     }
 
 		async getProductByIdUseCase(id: string) {
